@@ -1,4 +1,4 @@
-#Swift Rick & Morty App
+# Swift Rick & Morty App
 
 Full feature IOS app showcasing the Rick and Morty API
 
