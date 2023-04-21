@@ -9,7 +9,7 @@ import Foundation
 
 
 /// Represent unique API endpoint
-enum Endpoint: String{
+@frozen enum RMEndpoint: String{
     case character
     case location
     case episode
