@@ -37,6 +37,9 @@ class RMCharacterListView: UIView {
         collectionView.alpha = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(RMCharacterCollectionViewCell.self, forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
+        collectionView.register(RMFooterLoadingCollectionReusableView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier)
         
         return collectionView
     }()
@@ -65,10 +68,10 @@ class RMCharacterListView: UIView {
             spinner.widthAnchor.constraint(equalToConstant: 100),
             spinner.heightAnchor.constraint(equalToConstant: 100),
             
-           collectionView.topAnchor.constraint(equalTo: topAnchor),
-           collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-           collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-           collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
     
@@ -92,4 +95,10 @@ extension RMCharacterListView: RMCharacterListViewViewModelDelegate{
             self.collectionView.alpha = 1
         }
     }
+    func didLoadMoreCharacter(with newIndexPath: [IndexPath]) {
+        collectionView.performBatchUpdates{
+            self.collectionView.insertItems(at: newIndexPath)
+        }
+    }
+    
 }

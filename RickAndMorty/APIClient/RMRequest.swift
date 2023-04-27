@@ -71,7 +71,55 @@ final class RMRequest{
         self.pathComponents = pathComponents
         self.queryParameters = queryParameters
     }
-
+    
+    /// Attempt to create request
+    /// - Parameter url: URL to parse
+    convenience init?(url: URL){
+        let string = url.absoluteString
+        if !string.contains(Constant.baseUrl){
+            return nil
+        }
+        
+        let trimmed = string.replacingOccurrences(of: Constant.baseUrl + "/", with: "")     //baseURL.com/character/abc
+        if trimmed.contains("/"){
+            //after trim trimmed = "character/abc"
+            let components = trimmed.components(separatedBy: "/")
+            if !components.isEmpty{
+                let endpointString = components[0]
+                var pathComponents: [String] = []
+                if components.count > 1 {
+                    pathComponents = components
+                    pathComponents.removeFirst()
+                }
+                if let rmEndpoint = RMEndpoint(
+                    rawValue: endpointString
+                ){
+                    self.init(endPoint: rmEndpoint, pathComponents: pathComponents)
+                    return
+                }
+            }
+        }else if trimmed.contains("?"){
+            let components = trimmed.components(separatedBy: "?")
+            if !components.isEmpty, components.count >= 2{
+                let endpointString = components[0]
+                let queryItemsString = components[1]
+                //value=name&value=name
+                let queryItems: [URLQueryItem] = queryItemsString.components(separatedBy: "&").compactMap({
+                    guard $0.contains("=") else {
+                        return nil
+                    }
+                    let part = $0.components(separatedBy: "=")
+                    
+                    return URLQueryItem(name: part[0], value: part[1])
+                })
+                if let rmEndpoint = RMEndpoint(rawValue: endpointString){
+                    self.init(endPoint: rmEndpoint, queryParameters: queryItems)
+                    return
+                }
+            }
+        }
+        return nil
+    }
 }
 
 extension RMRequest{

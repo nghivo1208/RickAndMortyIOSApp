@@ -24,6 +24,8 @@ class RMCharacterCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .label
         label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
